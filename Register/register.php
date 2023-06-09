@@ -17,7 +17,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST") {
     if(!empty($name)&&!empty($email)&&!empty($phone)&&!empty($password)) {
         try {
             //підклюичти до Бази даних
-            $dbh = new PDO('mysql:host=localhost;dbname=pd123', "root", "");
+            include("connection_database.php");
+            if(isset($dbh))
             //Cтворює запит до БД
             $sql = "INSERT INTO users (name, email, phone,password) VALUES(?, ?, ?,?);";
             $stmt= $dbh->prepare($sql); //сворити параметризований запит
