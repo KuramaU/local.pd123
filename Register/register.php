@@ -3,6 +3,7 @@
 $name = "";
 $email= "";
 $phone="";
+$image ="";
 $password= "";
 if($_SERVER["REQUEST_METHOD"]=="POST") {
     //echo "<br/><br/><br/>";
@@ -11,21 +12,24 @@ if($_SERVER["REQUEST_METHOD"]=="POST") {
     if(isset($_POST["email"]))
         $email=$_POST["email"];
     if(isset($_POST["phone"]))
-        $email=$_POST["phone"]; //Супер глобальний масив, який зберігає значенян полів форми
+        $email=$_POST["phone"];
+    if(isset($_POST["image"]))
+        $email=$_POST["image"];
     if(isset($_POST["password"]))
         $password=$_POST["password"]; //Супер глобальний масив, який зберігає значенян полів форми
-    if(!empty($name)&&!empty($email)&&!empty($phone)&&!empty($password)) {
+    if(!empty($name)&&!empty($email)&&!empty($password)) {
         try {
             //підклюичти до Бази даних
             include("connection_database.php");
-            if(isset($dbh))
-            //Cтворює запит до БД
-            $sql = "INSERT INTO users (name, email, phone,password) VALUES(?, ?, ?,?);";
-            $stmt= $dbh->prepare($sql); //сворити параметризований запит
-            $stmt->execute([$name, $email,$phone, $password]);
-            $dbh = null;
-            header('Location: /'); //Перехід на головну сторінку
-            exit;
+            if(isset($dbh)) {
+                //Cтворює запит до БД
+                $sql = "INSERT INTO users (name, email, phone, password) VALUES(?, ?, ?, ?);";
+                $stmt = $dbh->prepare($sql); //сворити параметризований запит
+                $stmt->execute([$name, $email, $phone, $password]);
+                $dbh = null;
+                header('Location: /'); //Перехід на головну сторінку
+                exit;
+            }
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
